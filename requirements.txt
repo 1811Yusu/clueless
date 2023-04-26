@@ -17,3 +17,5 @@ djangorestframework_simplejwt
 django-cors-headers
 # для генерации slug
 python-slugify
+# авторизация через соц сети
+social-auth-app-django

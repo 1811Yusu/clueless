@@ -29,7 +29,7 @@ DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split()
 
-
+AUTH_USER_MODEL = 'user.User'
 
 # Application definition
 
@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     "corsheaders",
 
     'social_django',
+
+    'apps.cards',
+    'apps.user',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +61,28 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS= True 
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -185,7 +210,7 @@ EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_USE_TLS = config('USE_TLS', cast=bool)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 AUTHENTICATION_BACKENDS = [
@@ -211,15 +236,15 @@ GOOGLE_OAUTH2_CLIENT_ID = '123456789.apps.googleusercontent.com'
 GOOGLE_OAUTH2_CLIENT_SECRET = 'key_secert'
 
 
-SOCIAL_AUTH_PIPELINE = [
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-]
+# SOCIAL_AUTH_PIPELINE = [
+#     'social_core.pipeline.social_auth.social_details',
+#     'social_core.pipeline.social_auth.social_uid',
+#     'social_core.pipeline.social_auth.social_user',
+#     'social_core.pipeline.user.get_username',
+#     'social_core.pipeline.social_auth.associate_by_email',
+#     'social_core.pipeline.user.create_user',
+#     'social_core.pipeline.social_auth.associate_user',
+#     'social_core.pipeline.social_auth.load_extra_data',
+#     'social_core.pipeline.user.user_details',
+# ]
 

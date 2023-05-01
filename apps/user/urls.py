@@ -5,9 +5,9 @@ from .views import list_user , list_board , list_pin , list_savedpin , update_re
 
 app_name="apps=user"
 urlpatterns = [
-    path('get-token', obtain_auth_token), 
-    path('example', views.example_view), 
-    path('signup', views.sign_up), 
+    path('get-token/', obtain_auth_token), 
+    path('example/', views.example_view), 
+    path('signup/', views.sign_up), 
 
     path('login/', obtain_auth_token, name='login'),
     path('logout/', views.log_out, name="logout" ), 
@@ -21,7 +21,7 @@ urlpatterns = [
     path('users/<int:user_id>/delete/', views.delete_user, name="delete_user"),
     path('users/<int:user_id>/update/', views.update_user, name="update_user"),
     
-    path('suggestquery', views.search_autocomplete),
+    path('suggestquery/', views.search_autocomplete),
     
 
     path('list/<int:id>/',list_user,name='get-data'),

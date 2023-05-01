@@ -40,7 +40,7 @@ urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    path('', include('social_django.urls', namespace="social")),
+    path('accounts/', include('allauth.urls')),
     path('cards/',include('apps.cards.urls')),
     path('user/', include('apps.user.urls')),
 ]

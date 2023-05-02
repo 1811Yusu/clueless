@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from apps.user.models import User
 from rest_framework.authtoken.models import Token
 
-@receiver(post_save, sender=User)
-def User_created_handler(sender, instance, created, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def User_created_handler(sender, instance, created, **kwargs):
+#     if created:
+#         Token.objects.create(user=instance)

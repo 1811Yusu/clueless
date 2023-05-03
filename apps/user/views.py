@@ -1,5 +1,4 @@
-from collections import UserList
-import warnings
+from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.response import Response
@@ -13,13 +12,13 @@ from apps.cards.models import Pin
 import http.client
 
 
-
+User = User
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def example_view(request, format="json"):
-    content = { 'user': str(request.user), 'auth': str(request.auth), }
+    content = {'user': str(request.user), 'auth': str(request.auth), }
     return Response(content)
 
 
@@ -170,7 +169,6 @@ def search_autocomplete(request):
         print(request.GET)
         query = request.GET['q']
         p = Pin.objects.filter(title__icontains=query)
-        # print(p)
         pinlist = [PinSerializer(pin).data for pin in p ]
         u = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query)| Q(last_name__icontains=query) | Q(email__icontains=query) )
         usrlist = [UserSerializer(user).data for user in u] 
@@ -239,23 +237,6 @@ def list_savedpin(request,id):
     Serialzed_data = Saved_Pins(saved_pins,many=True)
     return Response(data=Serialzed_data.data,status=status.HTTP_200_OK)
 
-@api_view(['PATCH', 'DELETE'])
-@permission_classes([IsAuthenticated])
-def update_reactees(request,id):
-    saved_pins = Pin.objects.get(id=id)
-    user = User.objects.get(id=request.user.id)
-    if request.method == 'PATCH':
-        try:
-            saved_pins.reactees.add(user)
-            return Response(**{'data': 'done', 'status': status.HTTP_200_OK})
-        except Exception as e:
-            return Response(**{'data': str(e), 'status': status.HTTP_500_INTERNAL_SERVER_ERROR})
-    else:
-        try:
-            saved_pins.reactees.remove(user)
-            return Response(**{'data': 'deleted', 'status': status.HTTP_200_OK})
-        except Exception as e:
-            return Response(**{'data': str(e), 'status': status.HTTP_500_INTERNAL_SERVER_ERROR})
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])

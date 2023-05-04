@@ -17,7 +17,7 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         if self.validated_data.get('password') != self.validated_data.get('password_confirm'):
             raise serializers.ValidationError(
                 {
-                    'password': "The two Password field you entered doesn't match"
+                    'password': "Пароли не совпадают"
                 }
             )
 

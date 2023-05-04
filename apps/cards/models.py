@@ -2,7 +2,7 @@ from typing import Tuple
 from django.db import models
 from django.db.models.base import Model
 from django.db.models.deletion import SET, SET_NULL, CASCADE
-from apps.user.models import User
+
 from django.db.models.fields import TextField
 from django.db.models.fields.related import ForeignKey
 from core import settings
@@ -19,6 +19,7 @@ class Pin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     website = models.CharField(max_length=100, null=True, blank=True)
     creator = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
+    reactees = models.ManyToManyField(AUTH_USER_MODEL, related_name="reacted_on", blank=True)
     seen_by = models.ManyToManyField(AUTH_USER_MODEL, through="History", related_name="seen_pins")
 
     def __str__(self):
@@ -49,20 +50,12 @@ class Save(models.Model):
         ordering=['-saved_at']
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, 
-                             on_delete=models.CASCADE, 
-                             related_name='comments')
     pin = models.ForeignKey(Pin, on_delete=SET_NULL, null=True)
     creator = models.ForeignKey(AUTH_USER_MODEL, on_delete=SET_NULL, null=True)
     content = models.TextField()
     time = models.DateTimeField(auto_now_add=True)
+    reactee = models.ManyToManyField(AUTH_USER_MODEL, related_name="reacted_on_comments")
 
-    class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
-
-    def __str__(self) -> str:
-        return f'Комментарий от {self.user.username}'
 
 class Reply(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -76,6 +69,8 @@ class Reply(models.Model):
 class Message(models.Model):
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name="sent_messages")
+    recevier = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name="received_messages")
     content = models.TextField()
 
     time = models.DateTimeField()
@@ -89,4 +84,3 @@ class History(models.Model):
     class Meta:
         unique_together = (('user', 'pin'),)
         ordering = ['-time']
-
